@@ -15,7 +15,7 @@ function inject_git() {
     if [ $? == 0 ]; then
         DIRTY_FILES=`git diff-files --ignore-submodules --name-only 2>/dev/null`
         UNTRACKED_FILES=`git ls-files --exclude-standard --others 2>/dev/null`
-        UNTRACKED_FILES="$UNTRACKED_FILES `git ls-files $1 --ignored --exclude-standard --others 2>/dev/null`"
+        UNTRACKED_FILES="$UNTRACKED_FILES `git ls-files --ignored --exclude-standard --others 2>/dev/null`"
         COMMITTED_FILES=`git ls-files 2>/dev/null`
         STAGED_FILES=`git diff --name-only --cached 2>/dev/null`
 
