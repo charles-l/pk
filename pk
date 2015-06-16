@@ -1,0 +1,41 @@
+#!/bin/sh
+#TODO: perhaps grep info from git status, so it's faster
+DIR="$1"
+OUT=`ls -lah $DIR`
+
+function inject_git() {
+    git rev-parse --git-dir 1>/dev/null 2>/dev/null
+    if [ $? == 0 ]; then
+        DIRTY_FILES=`git diff-files --ignore-submodules --name-only 2>/dev/null`
+        UNTRACKED_FILES=`git ls-files --exclude-standard --others 2>/dev/null`
+        UNTRACKED_FILES="$UNTRACKED_FILES `git ls-files $1 --ignored --exclude-standard --others 2>/dev/null`"
+        COMMITTED_FILES=`git ls-files 2>/dev/null`
+        STAGED_FILES=`git diff --name-only --cached 2>/dev/null`
+
+        for f in $DIRTY_FILES; do
+            OUT=`printf "$OUT" | sed "s|$f$|$f dirty|"`
+        done
+
+        for f in $UNTRACKED_FILES; do
+            OUT=`printf "$OUT" | sed "s|$f$|$f untracked|"`
+        done
+
+        for f in $STAGED_FILES; do
+            OUT=`printf "$OUT" | sed "s|$f$|$f staged|"`
+        done
+
+        for f in $COMMITTED_FILES; do
+            OUT=`printf "$OUT" | sed "s|$f$|$f committed|"`
+        done
+    fi
+}
+
+function inject_file_weight() {
+    OUT=`printf "$OUT" | sed "s|\([0-9]*\.*[0-9]*G\)\{1\}|*\1*|g"`
+    OUT=`printf "$OUT" | sed "s|\([0-9]*\.*[0-9]*G\)\{1\}|*\1*|g"`
+}
+
+inject_git
+inject_file_weight
+
+printf "$OUT\n"
