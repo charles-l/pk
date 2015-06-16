@@ -12,7 +12,7 @@ NC=$(printf '\033[0;0m')
 
 function inject_git() {
     git rev-parse --git-dir 1>/dev/null 2>/dev/null
-    if [ $? == 0 ]; then
+    if [[ $? == 0 ]]; then
         DIRTY_FILES=`git diff-files --ignore-submodules --name-only 2>/dev/null`
         UNTRACKED_FILES=`git ls-files --exclude-standard --others 2>/dev/null`
         UNTRACKED_FILES="$UNTRACKED_FILES `git ls-files --ignored --exclude-standard --others 2>/dev/null`"
@@ -32,7 +32,10 @@ function inject_git() {
         done
 
         for f in $COMMITTED_FILES; do
-            OUT=`printf "$OUT" | sed "s|^((?!\|).)*$f$|$BLUE\|$NC $f|"`
+            printf "$OUT" | grep "^.*|.*$f$" 1>/dev/null 2>/dev/null
+            if [[ $? == 1 ]]; then
+                OUT=`printf "$OUT" | sed "s|$f$|$BLUE\|$NC $f|"`
+            fi
         done
     fi
 }
