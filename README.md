@@ -8,6 +8,6 @@ Inspired by [k](https://github.com/supercrabtree/k)
 - Color larger files brighter colors
 
 ## TODO
-- [] Make it detect directory status
-- [] Make coloring smarter
-- [] Add rotting dates
+- [ ] Make it detect directory status
+- [ ] Make coloring smarter
+- [ ] Add rotting dates
