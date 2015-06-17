@@ -7,7 +7,11 @@ Inspired by [k](https://github.com/supercrabtree/k)
 - Highlight files with git status
 - Color larger files brighter colors
 
+## Installation
+Put `k` in your path. Only deps are `git`, `sed` and `awk`.
+
 ## TODO
+- [ ] Make it faster?
 - [ ] Make it detect directory status
 - [ ] Make coloring smarter
 - [ ] Add rotting dates
